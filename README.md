@@ -45,11 +45,17 @@ $ git clone https://github.com/argelcapela/42-philosophers.git
 # 2) Entre na pasta app
 $ cd app	
 	
-# 3) Compilar o mandatório
+# 3) Para compilar o mandatório, entre na pasta philo e:
 $ make
 
-# 4) Executar o mandatório
-$ ./philo
+# 4) Para executar o mandatório, execute o binário philo, com seus respectivos argumentos, sem os colchetes:
+$ ./philo [número_de_filósofos] [tempo_para_morrer] [tempo_para_comer] [tempo_para_dormir] [número_de_tempo_que_cada_filósofo_deve_comer]
+
+# 5) Para compilar o bônus, entre na pasta philo_bonus e:
+$ make
+
+# 6) Para executar o bônus, execute o binário philo_bonus, com seus respectivos argumentos, sem os colchetes:
+$ ./philo_bonus [número_de_filósofos] [tempo_para_morrer] [tempo_para_comer] [tempo_para_dormir] [número_de_tempo_que_cada_filósofo_deve_comer]
 ```
 	
 </div>
