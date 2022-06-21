@@ -6,7 +6,7 @@
 /*   By: argel <argel@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 18:41:09 by acapela-          #+#    #+#             */
-/*   Updated: 2022/06/21 12:52:34 by argel            ###   ########.fr       */
+/*   Updated: 2022/06/21 16:03:19 by argel            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,13 +42,14 @@
 * @param
 */
 typedef struct s_app{
-	int 		n_philo;
-	int 		time_to_eat;
-	int 		time_to_sleep;
-	int 		time_to_die;
-	int 		max_meals;
-	int			stop;
-	long int	start_time;
+	pthread_mutex_t	*fork;
+	int 			n_philo;
+	int 			time_to_eat;
+	int 			time_to_sleep;
+	int 			time_to_die;
+	int 			max_meals;
+	int				stop;
+	long int		start_time;
 } t_app;
 
 /**
@@ -59,7 +60,8 @@ typedef struct s_app{
 typedef struct s_philo{
 	int			id;
 	pthread_t   thread;
-	t_app		*app;	
+	t_app		*app;
+	long int	last_meal_time;
 } t_philo;
 
 /***************************************************************************** #
@@ -76,17 +78,19 @@ typedef struct s_philo{
 /***************************************************************************** #
 #                          PHILO_CIRCLE_OF_LIFE.C                              #
 # *****************************************************************************/
-void	*philo_circle_of_life(void *p_philo);
+void		*philo_circle_of_life(void *p_philo);
 
 /***************************************************************************** #
 #                             PHILO_THREADS.C                                  #
 # *****************************************************************************/
-void    ensure_threads_terminate(t_philo **philo, t_app *app);
+void    	ensure_threads_terminate(t_philo **philo, t_app *app);
+void    	init_forks(t_app *app);
+void    	destroy_forks(t_app *app);
 
 /***************************************************************************** #
 #                              PHILO_UTILS.C                                   #
 # *****************************************************************************/
-long int	start_curr_time_diff(long int start);
+long int	get_time(long int start);
 void		print(t_philo *philo, int state);
 int			ft_isdigit(int c);
 int			ft_atoi(const char *str);

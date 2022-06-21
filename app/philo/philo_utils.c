@@ -6,7 +6,7 @@
 /*   By: argel <argel@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 18:41:05 by acapela-          #+#    #+#             */
-/*   Updated: 2022/06/21 13:17:36 by argel            ###   ########.fr       */
+/*   Updated: 2022/06/21 15:28:56 by argel            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@
 * @line 42 
 * @line 43
 */
-long int start_curr_time_diff(long int start_time)
+long int get_time(long int start_time)
 {
 	struct			timeval timer;
 	long int 		current_time;
@@ -80,7 +80,7 @@ void	print(t_philo *philo, int state)
 	}
 	else
 		printf("%5.3li\t%d %s\n", \
-start_curr_time_diff(philo->app->start_time), philo->id, msg[state]);
+get_time(philo->app->start_time), philo->id + 1, msg[state]);
 }
 
 int	ft_isdigit(int c)
