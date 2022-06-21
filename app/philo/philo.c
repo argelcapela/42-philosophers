@@ -6,7 +6,7 @@
 /*   By: argel <argel@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 18:41:00 by acapela-          #+#    #+#             */
-/*   Updated: 2022/06/20 21:18:23 by argel            ###   ########.fr       */
+/*   Updated: 2022/06/21 12:43:33 by argel            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 void	parse_args(int argc, char **argv);
 void	init_app(t_app *app, int argc, char **argv);
-void	init_philos(t_philo *philos, t_app *app);
-void	monitor(t_philo *philos, t_app *app);
+void	init_philos(t_philo **philos, t_app *app);
+void	inspector(t_app *app);
 
 int	main(int argc, char **argv)
 {
@@ -25,8 +25,9 @@ int	main(int argc, char **argv)
 	philo = NULL;
 	parse_args(argc, argv);
 	init_app(&app, argc, argv);
-	init_philos(philo, &app);
-	monitor(philo, &app);
+	init_philos(&philo, &app);
+	inspector(&app);
+	ensure_threads_terminate(&philo, &app);
 	free(philo);
 	return (0);
 }
@@ -62,21 +63,32 @@ void	init_app(t_app *app, int argc, char **argv)
 	app->time_to_eat = ft_atoi(argv[3]);
 	app->time_to_sleep = ft_atoi(argv[4]);
 	if (argc == 6)
-		app->max_meals_by_philo = ft_atoi(argv[5]);
+		app->max_meals = ft_atoi(argv[5]) * app->n_philo;
+	else
+	 	app->max_meals = -8;
+	app->stop = 0;
+	app->start_time = start_curr_time_diff(0);
 }
 
-void	init_philos(t_philo *philo, t_app *app)
+void	init_philos(t_philo **philo, t_app *app)
 {
-	philo = malloc(app->n_philo * sizeof(t_philo));
-	while (philo++)
+	int	i;
+
+	(*philo) = malloc(app->n_philo * sizeof(t_philo));
+	i = -1;
+	while (++i < app->n_philo)
 	{
-		printf("teste\n");	}
+		philo[0][i].app = app;
+		philo[0][i].id = i + 1;
+		pthread_create(&philo[0][i].thread, NULL, philo_circle_of_life, &philo[0][i]);	
+	}
 }
 
-void	monitor(t_philo *philos, t_app *app)
+void	inspector(t_app *app)
 {
-	if(app && philos)
+	while (app->stop == 0)
 	{
-		
+		if(app->max_meals == 0)
+			app->stop = 1;
 	}
 }
