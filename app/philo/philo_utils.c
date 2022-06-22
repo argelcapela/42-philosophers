@@ -6,7 +6,7 @@
 /*   By: argel <argel@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 18:41:05 by acapela-          #+#    #+#             */
-/*   Updated: 2022/06/21 15:28:56 by argel            ###   ########.fr       */
+/*   Updated: 2022/06/22 09:35:53 by argel            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,10 @@
 * @line 42 
 * @line 43
 */
-long int get_time(long int start_time)
+long int	get_time(long int start_time)
 {
-	struct			timeval timer;
-	long int 		current_time;
+	struct timeval	timer;
+	long int		current_time;
 
 	gettimeofday(&timer, NULL);
 	current_time = timer.tv_sec * 1000;
@@ -63,7 +63,7 @@ long int get_time(long int start_time)
 */
 void	print(t_philo *philo, int state)
 {
-	char *msg[6];
+	char	*msg[6];
 
 	msg[0] = "has taken a fork";
 	msg[1] = "is eating";
@@ -73,7 +73,7 @@ void	print(t_philo *philo, int state)
 	msg[5] = "Invalid argument, please try again! \n\nexample:\n \
 ./philo [number_of_philosophers] [time_to_die] [time_to_eat] \
 [time_to_sleep] [number_of_times_each_philosopher_must_eat]\n\n";
-	if (philo == NULL  && state == INVALID_ARGS)
+	if (philo == NULL && state == INVALID_ARGS)
 	{
 		printf("%s", msg[5]);
 		exit(1);
