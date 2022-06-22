@@ -1,40 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo_circle_of_life.c                             :+:      :+:    :+:   */
+/*   2_routine.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: argel <argel@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 18:41:05 by acapela-          #+#    #+#             */
-/*   Updated: 2022/06/22 09:31:53 by argel            ###   ########.fr       */
+/*   Updated: 2022/06/22 14:32:11 by argel            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <philo.h>
 
-static int		philo_eat(t_philo *philo);
-static void		philo_sleep(t_philo *philo);
-static void		philo_think(t_philo *philo, int time);
-
-void	*philo_circle_of_life(void *p_philo)
-{
-	t_philo	*philo;
-
-	philo = (t_philo *) p_philo;
-	if ((philo->id % 2))
-		philo_think(philo, philo->app->time_to_eat);
-	while (philo->app->stop == 0)
-	{
-		if (philo->meals == 0 || philo->app->stop == 1 || philo_eat(philo))
-			break ;
-		philo_sleep(philo);
-		philo_think(philo, 0);
-	}
-	return (NULL);
-}
-
 static int	philo_eat(t_philo *philo)
 {
+	if (philo->app->stop)
+		return (1);
 	pthread_mutex_lock(&philo->app->fork[philo->id]);
 	print(philo, FORK);
 	if (philo->app->stop)
@@ -77,4 +58,21 @@ static void	philo_think(t_philo *philo, int time)
 	print(philo, THINK);
 	if (time != 0)
 		usleep(time);
+}
+
+void	*routine(void *p_philo)
+{
+	t_philo	*philo;
+
+	philo = (t_philo *) p_philo;
+	if ((philo->id % 2))
+		philo_think(philo, philo->app->time_to_eat);
+	while (philo->app->stop == 0)
+	{
+		if (philo->meals == 0 || philo->app->stop == 1 || philo_eat(philo))
+			break ;
+		philo_sleep(philo);
+		philo_think(philo, 0);
+	}
+	return (NULL);
 }

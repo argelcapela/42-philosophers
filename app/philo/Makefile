@@ -16,10 +16,10 @@ HEADER_DIR =   ./$(SRCS_DIR)
 HEADER =		$(HEADER_DIR)/philo.h
 NAME =			philo
 
-SRCS_FILES =	philo_circle_of_life.c \
-				philo_threads.c \
-				philo_utils.c \
-				philo.c
+SRCS_FILES =	1_main.c \
+				2_routine.c \
+				3_utils_1.c \
+				4_utils_2.c
 
 SRCS = 			$(addprefix $(SRCS_DIR)/, $(SRCS_FILES))
 OBJS =          $(SRCS:$(SRCS_DIR)/%.c=$(OBJS_DIR)/%.o)

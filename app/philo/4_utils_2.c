@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo_utils.c                                      :+:      :+:    :+:   */
+/*   4_utils_2.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: argel <argel@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 18:41:05 by acapela-          #+#    #+#             */
-/*   Updated: 2022/06/22 09:35:53 by argel            ###   ########.fr       */
+/*   Updated: 2022/06/22 14:31:33 by argel            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,46 +75,55 @@ void	print(t_philo *philo, int state)
 [time_to_sleep] [number_of_times_each_philosopher_must_eat]\n\n";
 	if (philo == NULL && state == INVALID_ARGS)
 	{
-		printf("%s", msg[5]);
+		ft_putstr_fd(msg[5], 1);
 		exit(1);
 	}
 	else
-		printf("%5.3li\t%d %s\n", \
-get_time(philo->app->start_time), philo->id + 1, msg[state]);
+	{
+		pthread_mutex_lock(&philo->app->write_m);
+		ft_putnbr_fd(get_time(philo->app->start_time), 1);
+		write(1, "\t", 1);
+		ft_putnbr_fd(philo->id + 1, 2);
+		write(1, " ", 1);
+		ft_putstr_fd(msg[state], 1);
+		write(1, "\n", 1);
+		pthread_mutex_unlock(&philo->app->write_m);
+	}
 }
 
-int	ft_isdigit(int c)
+void	init_forks(t_app *app)
 {
-	if (c >= 48 && c <= 57)
-		return (1);
-	else
-		return (0);
-}
-
-int	ft_atoi(const char *str)
-{
-	int	s;
 	int	i;
-	int	res;
 
-	s = 1;
+	app->fork = malloc(app->n_philo * \
+sizeof(pthread_mutex_t));
 	i = 0;
-	res = 0;
-	while (str[i] == '\t' || str[i] == ' ' || str[i] == '\r'
-		|| str[i] == '\v' || str[i] == '\f' || str[i] == '\n')
-		i++;
-	if (str[i] == '-' || str[i] == '+')
+	pthread_mutex_init(&app->write_m, NULL);
+	while (i < app->n_philo)
 	{
-		if (str[i] == '-')
-		{
-			s *= -1;
-		}
+		pthread_mutex_init(&app->fork[i], NULL);
 		i++;
 	}
-	while (ft_isdigit(str[i]))
+}
+
+void	destroy_forks(t_app *app)
+{
+	int	i;
+
+	i = 0;
+	while (i < app->n_philo)
 	{
-		res = res * 10 + (str[i] - 48);
+		pthread_mutex_destroy(&app->fork[i]);
 		i++;
 	}
-	return (res * s);
+	pthread_mutex_destroy(&app->write_m);
+}
+
+void	exit_free(t_philo **philo)
+{
+	ensure_threads_terminate(philo);
+	destroy_forks((*philo)->app);
+	free((*philo)->app->fork);
+	free((*philo));
+	exit(0);
 }
