@@ -6,7 +6,7 @@
 /*   By: argel <argel@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 18:41:05 by acapela-          #+#    #+#             */
-/*   Updated: 2022/06/22 14:31:33 by argel            ###   ########.fr       */
+/*   Updated: 2022/06/22 14:55:05 by argel            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,7 +121,6 @@ void	destroy_forks(t_app *app)
 
 void	exit_free(t_philo **philo)
 {
-	ensure_threads_terminate(philo);
 	destroy_forks((*philo)->app);
 	free((*philo)->app->fork);
 	free((*philo));

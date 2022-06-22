@@ -6,12 +6,11 @@
 /*   By: argel <argel@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 18:41:00 by acapela-          #+#    #+#             */
-/*   Updated: 2022/06/22 14:31:07 by argel            ###   ########.fr       */
+/*   Updated: 2022/06/22 17:34:39 by argel            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <philo.h>
-#include <pthread.h>
 
 void	init_app(t_app *app, int argc, char **argv)
 {
@@ -74,11 +73,14 @@ void	inspector(t_philo **philo, t_app *app)
 		if (get_time(philo[0][i].last_meal_time) > app->time_to_die)
 		{
 			app->stop = 1;
+			usleep(500);
 			print(&philo[0][i], DIE);
-			exit_free(philo);
 		}
 		if (app->max_meals == 0)
+		{
 			app->stop = 1;
+			exit_free(philo);
+		}
 		i++;
 	}
 }
@@ -95,6 +97,7 @@ int	main(int argc, char **argv)
 	init_forks(&app);
 	init_philos(&philo, &app);
 	inspector(&philo, &app);
+	ensure_threads_terminate(&philo);
 	exit_free(&philo);
 	return (0);
 }

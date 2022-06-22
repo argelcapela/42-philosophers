@@ -6,7 +6,7 @@
 /*   By: argel <argel@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 18:41:05 by acapela-          #+#    #+#             */
-/*   Updated: 2022/06/22 14:32:11 by argel            ###   ########.fr       */
+/*   Updated: 2022/06/22 17:41:46 by argel            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,18 +14,15 @@
 
 static int	philo_eat(t_philo *philo)
 {
-	if (philo->app->stop)
+	if (philo->app->stop == 0)
+		pthread_mutex_unlock(&philo->app->died);
+	else
 		return (1);
 	pthread_mutex_lock(&philo->app->fork[philo->id]);
 	print(philo, FORK);
-	if (philo->app->stop)
-	{
-		pthread_mutex_unlock(&philo->app->fork[philo->id]);
-		return (1);
-	}
 	if (philo->app->n_philo == 1)
 		return (1);
-	else if (philo->id == philo->app->n_philo - 1)
+	if (philo->id == philo->app->n_philo - 1)
 		pthread_mutex_lock(&philo->app->fork[0]);
 	else
 		pthread_mutex_lock(&philo->app->fork[philo->id + 1]);
@@ -65,11 +62,14 @@ void	*routine(void *p_philo)
 	t_philo	*philo;
 
 	philo = (t_philo *) p_philo;
+	if (philo->app->stop)
+			pthread_mutex_lock(&philo->app->died);
 	if ((philo->id % 2))
 		philo_think(philo, philo->app->time_to_eat);
 	while (philo->app->stop == 0)
 	{
-		if (philo->meals == 0 || philo->app->stop == 1 || philo_eat(philo))
+		pthread_mutex_lock(&philo->app->died);
+		if (philo_eat(philo) ||philo->meals == 0 || philo->app->stop == 1)
 			break ;
 		philo_sleep(philo);
 		philo_think(philo, 0);

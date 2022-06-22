@@ -6,7 +6,7 @@
 /*   By: argel <argel@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 18:41:09 by acapela-          #+#    #+#             */
-/*   Updated: 2022/06/22 14:21:24 by argel            ###   ########.fr       */
+/*   Updated: 2022/06/22 16:58:42 by argel            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ typedef struct s_app
 	int				stop;
 	long int		start_time;
 	pthread_mutex_t	write_m;
+	pthread_mutex_t	died;
 }	t_app;
 
 /**
@@ -79,7 +80,6 @@ typedef struct s_philo
 # define THINK  		3
 # define DIE  			4
 # define INVALID_ARGS  	5
-
 
 void		*routine(void *p_philo);
 void		ensure_threads_terminate(t_philo **philo);
