@@ -2,6 +2,17 @@
 # Copyright © 2022 de Argel Capela, Todos os direitos reservados
 #
 
+#
+# Next Implementations:
+# - Leaks Checker
+# - Random tests
+# - Check Sintax 
+# - Check Norm
+# - Check Makefile
+# - Test Bonus Also
+#
+
+
 clear
 
 #######################################################
