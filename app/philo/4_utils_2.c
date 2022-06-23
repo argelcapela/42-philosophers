@@ -6,7 +6,7 @@
 /*   By: argel <argel@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 18:41:05 by acapela-          #+#    #+#             */
-/*   Updated: 2022/06/22 14:55:05 by argel            ###   ########.fr       */
+/*   Updated: 2022/06/23 12:08:47 by argel            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,17 +78,8 @@ void	print(t_philo *philo, int state)
 		ft_putstr_fd(msg[5], 1);
 		exit(1);
 	}
-	else
-	{
-		pthread_mutex_lock(&philo->app->write_m);
-		ft_putnbr_fd(get_time(philo->app->start_time), 1);
-		write(1, "\t", 1);
-		ft_putnbr_fd(philo->id + 1, 2);
-		write(1, " ", 1);
-		ft_putstr_fd(msg[state], 1);
-		write(1, "\n", 1);
-		pthread_mutex_unlock(&philo->app->write_m);
-	}
+	else if ((!philo->app->stop) || (philo->app->stop && state == DIE))
+		printf("%5.3li\t%d %s\n", get_time(philo->app->start_time), philo->id + 1, msg[state]);
 }
 
 void	init_forks(t_app *app)

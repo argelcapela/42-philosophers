@@ -6,7 +6,7 @@
 /*   By: argel <argel@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 18:41:00 by acapela-          #+#    #+#             */
-/*   Updated: 2022/06/22 17:34:39 by argel            ###   ########.fr       */
+/*   Updated: 2022/06/23 10:40:32 by argel            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,14 +66,15 @@ void	inspector(t_philo **philo, t_app *app)
 	int	i;
 
 	i = 0;
-	while (app->stop == 0)
+	while (!app->stop)
 	{
-		if (i == app->n_philo)
+		if (i == (app->n_philo))
+		{
 			i = 0;
+		}
 		if (get_time(philo[0][i].last_meal_time) > app->time_to_die)
 		{
 			app->stop = 1;
-			usleep(500);
 			print(&philo[0][i], DIE);
 		}
 		if (app->max_meals == 0)

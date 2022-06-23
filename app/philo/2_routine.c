@@ -6,7 +6,7 @@
 /*   By: argel <argel@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 18:41:05 by acapela-          #+#    #+#             */
-/*   Updated: 2022/06/22 17:41:46 by argel            ###   ########.fr       */
+/*   Updated: 2022/06/23 11:54:28 by argel            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,17 @@
 
 static int	philo_eat(t_philo *philo)
 {
-	if (philo->app->stop == 0)
-		pthread_mutex_unlock(&philo->app->died);
-	else
-		return (1);
+	//printf("\n %d quer comer!!\n\n", philo->id);
 	pthread_mutex_lock(&philo->app->fork[philo->id]);
+	if (philo->app->stop)
+	{
+		pthread_mutex_unlock(&philo->app->fork[philo->id]);
+		return (1);
+	}
 	print(philo, FORK);
 	if (philo->app->n_philo == 1)
 		return (1);
-	if (philo->id == philo->app->n_philo - 1)
+	else if (philo->id == (philo->app->n_philo - 1))
 		pthread_mutex_lock(&philo->app->fork[0]);
 	else
 		pthread_mutex_lock(&philo->app->fork[philo->id + 1]);
@@ -33,46 +35,55 @@ static int	philo_eat(t_philo *philo)
 	philo->meals--;
 	philo->app->max_meals--;
 	pthread_mutex_unlock(&philo->app->fork[philo->id]);
-	if (philo->id == philo->app->n_philo - 1)
+	if (philo->id == (philo->app->n_philo - 1))
 		pthread_mutex_unlock(&philo->app->fork[0]);
 	else
 		pthread_mutex_unlock(&philo->app->fork[philo->id + 1]);
 	return (0);
 }
 
-static void	philo_sleep(t_philo *philo)
+static int	philo_sleep(t_philo *philo)
 {
-	if (philo->app->stop == 1)
-		return ;
+	if (philo->app->stop)
+		return (1);
 	print(philo, SLEEP);
 	usleep(philo->app->time_to_sleep * 1000);
+	return (0);
 }
 
-static void	philo_think(t_philo *philo, int time)
+static int	philo_think(t_philo *philo, int time)
 {
-	if (philo->app->stop == 1)
-		return ;
+	if (philo->app->stop)
+		return (1);
 	print(philo, THINK);
 	if (time != 0)
+	{
+		if (philo->app->stop)
+			return (1);
 		usleep(time);
+	}
+	if (philo->app->stop)
+		return (1);
+	return (0);
 }
 
 void	*routine(void *p_philo)
 {
 	t_philo	*philo;
+	int		time_to_think;
 
-	philo = (t_philo *) p_philo;
-	if (philo->app->stop)
-			pthread_mutex_lock(&philo->app->died);
-	if ((philo->id % 2))
-		philo_think(philo, philo->app->time_to_eat);
-	while (philo->app->stop == 0)
+	philo = p_philo;
+	time_to_think = philo->app->time_to_die - \
+(philo->app->time_to_eat + philo->app->time_to_sleep);	
+	if ((philo->id % 2) != 0)
+		philo_think(philo, time_to_think);
+	while (!philo->app->stop)
 	{
-		pthread_mutex_lock(&philo->app->died);
-		if (philo_eat(philo) ||philo->meals == 0 || philo->app->stop == 1)
+		if (philo_eat(philo) || 
+			philo_sleep(philo) ||  
+			philo_think(philo, 0) ||
+			philo->app->stop)
 			break ;
-		philo_sleep(philo);
-		philo_think(philo, 0);
 	}
 	return (NULL);
 }

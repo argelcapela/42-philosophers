@@ -6,7 +6,7 @@
 /*   By: argel <argel@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 18:41:09 by acapela-          #+#    #+#             */
-/*   Updated: 2022/06/22 16:58:42 by argel            ###   ########.fr       */
+/*   Updated: 2022/06/23 12:05:45 by argel            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ void		ensure_threads_terminate(t_philo **philo);
 int			ft_isdigit(int c);
 int			ft_atoi(const char *str);
 int			ft_putstr_fd(char *s, int fd);
-void		ft_putnbr_fd(int n, int fd);
+void		ft_putnbr_fd(long int n, int fd);
 
 long int	get_time(long int start);
 void		print(t_philo *philo, int state);
