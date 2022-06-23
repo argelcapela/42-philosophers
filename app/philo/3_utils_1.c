@@ -6,7 +6,7 @@
 /*   By: argel <argel@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 18:41:05 by acapela-          #+#    #+#             */
-/*   Updated: 2022/06/23 12:05:19 by argel            ###   ########.fr       */
+/*   Updated: 2022/06/23 14:02:37 by argel            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,45 +46,4 @@ int	ft_atoi(const char *str)
 		i++;
 	}
 	return (res * s);
-}
-
-int	ft_putstr_fd(char *s, int fd)
-{
-	int		bytes_read;
-
-	bytes_read = 0;
-	while (*s)
-	{
-		bytes_read += write(fd, s, 1);
-		s++;
-	}
-	return (bytes_read);
-}
-
-void	ft_putnbr_fd(long int n, int fd)
-{
-	long int		mais1;
-	char	c;
-
-	mais1 = 0;
-	if (n < 0)
-	{
-		if (n == -2147483648)
-		{
-			n += 1;
-			mais1 = 1;
-		}
-		n *= -1;
-		write(fd, "-", 1);
-	}
-	if (n < 10)
-	{
-		c = '0' + n;
-		write (fd, &c, 1);
-	}
-	else
-	{
-		ft_putnbr_fd(n / 10, fd);
-		ft_putnbr_fd(n % 10 + mais1, fd);
-	}
 }

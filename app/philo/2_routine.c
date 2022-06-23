@@ -6,7 +6,7 @@
 /*   By: argel <argel@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 18:41:05 by acapela-          #+#    #+#             */
-/*   Updated: 2022/06/23 11:54:28 by argel            ###   ########.fr       */
+/*   Updated: 2022/06/23 16:58:55 by argel            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 static int	philo_eat(t_philo *philo)
 {
-	//printf("\n %d quer comer!!\n\n", philo->id);
 	pthread_mutex_lock(&philo->app->fork[philo->id]);
 	if (philo->app->stop)
 	{
@@ -57,13 +56,7 @@ static int	philo_think(t_philo *philo, int time)
 		return (1);
 	print(philo, THINK);
 	if (time != 0)
-	{
-		if (philo->app->stop)
-			return (1);
 		usleep(time);
-	}
-	if (philo->app->stop)
-		return (1);
 	return (0);
 }
 
@@ -73,13 +66,13 @@ void	*routine(void *p_philo)
 	int		time_to_think;
 
 	philo = p_philo;
-	time_to_think = philo->app->time_to_die - \
-(philo->app->time_to_eat + philo->app->time_to_sleep);	
+	time_to_think = philo->app->time_to_eat;
 	if ((philo->id % 2) != 0)
 		philo_think(philo, time_to_think);
 	while (!philo->app->stop)
 	{
-		if (philo_eat(philo) || 
+		if (philo->meals == 0 ||
+			philo_eat(philo) || 
 			philo_sleep(philo) ||  
 			philo_think(philo, 0) ||
 			philo->app->stop)

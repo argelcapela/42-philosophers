@@ -6,7 +6,7 @@
 /*   By: argel <argel@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 18:41:05 by acapela-          #+#    #+#             */
-/*   Updated: 2022/06/23 12:08:47 by argel            ###   ########.fr       */
+/*   Updated: 2022/06/23 15:41:06 by argel            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,16 +33,19 @@
 * @line 42 
 * @line 43
 */
-long int	get_time(long int start_time)
+long int	get_time(long int last_meal_or_action_time)
 {
-	struct timeval	timer;
+	struct timeval	tv;
+	long int		secon_to_mili;
+	long int		micro_to_mili;
 	long int		current_time;
 
-	gettimeofday(&timer, NULL);
-	current_time = timer.tv_sec * 1000;
-	current_time += timer.tv_usec / 1000;
-	if (start_time)
-		current_time -= start_time;
+	gettimeofday(&tv, NULL);
+	secon_to_mili = tv.tv_sec * 1000;
+	micro_to_mili = tv.tv_usec / 1000;
+	current_time = secon_to_mili + micro_to_mili;
+	if (last_meal_or_action_time != 0)
+		current_time-= last_meal_or_action_time;
 	return (current_time);
 }
 
@@ -75,11 +78,13 @@ void	print(t_philo *philo, int state)
 [time_to_sleep] [number_of_times_each_philosopher_must_eat]\n\n";
 	if (philo == NULL && state == INVALID_ARGS)
 	{
-		ft_putstr_fd(msg[5], 1);
+		printf("%s", msg[5]);
 		exit(1);
 	}
-	else if ((!philo->app->stop) || (philo->app->stop && state == DIE))
-		printf("%5.3li\t%d %s\n", get_time(philo->app->start_time), philo->id + 1, msg[state]);
+	else if ((philo->app->stop && state == DIE))
+		printf("%5.3ld\t%d %s\n", get_time(philo->app->start_time) - 2, philo->id + 1, msg[state]);
+	else if (!philo->app->stop) 
+		printf("%5.3ld\t%d %s\n", get_time(philo->app->start_time), philo->id + 1, msg[state]);
 }
 
 void	init_forks(t_app *app)
