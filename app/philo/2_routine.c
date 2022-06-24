@@ -6,7 +6,7 @@
 /*   By: argel <argel@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 18:41:05 by acapela-          #+#    #+#             */
-/*   Updated: 2022/06/23 16:58:55 by argel            ###   ########.fr       */
+/*   Updated: 2022/06/24 16:31:02 by argel            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,11 +71,11 @@ void	*routine(void *p_philo)
 		philo_think(philo, time_to_think);
 	while (!philo->app->stop)
 	{
-		if (philo->meals == 0 ||
-			philo_eat(philo) || 
-			philo_sleep(philo) ||  
-			philo_think(philo, 0) ||
-			philo->app->stop)
+		if (philo->meals == 0
+			|| philo_eat(philo)
+			|| philo_sleep(philo)
+			|| philo_think(philo, 0)
+			|| philo->app->stop)
 			break ;
 	}
 	return (NULL);

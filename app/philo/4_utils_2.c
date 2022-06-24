@@ -6,7 +6,7 @@
 /*   By: argel <argel@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 18:41:05 by acapela-          #+#    #+#             */
-/*   Updated: 2022/06/23 15:41:06 by argel            ###   ########.fr       */
+/*   Updated: 2022/06/24 16:30:02 by argel            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ long int	get_time(long int last_meal_or_action_time)
 	micro_to_mili = tv.tv_usec / 1000;
 	current_time = secon_to_mili + micro_to_mili;
 	if (last_meal_or_action_time != 0)
-		current_time-= last_meal_or_action_time;
+		current_time -= last_meal_or_action_time;
 	return (current_time);
 }
 
@@ -66,7 +66,8 @@ long int	get_time(long int last_meal_or_action_time)
 */
 void	print(t_philo *philo, int state)
 {
-	char	*msg[6];
+	char		*msg[6];
+	long int	tmp;
 
 	msg[0] = "has taken a fork";
 	msg[1] = "is eating";
@@ -76,15 +77,21 @@ void	print(t_philo *philo, int state)
 	msg[5] = "Invalid argument, please try again! \n\nexample:\n \
 ./philo [number_of_philosophers] [time_to_die] [time_to_eat] \
 [time_to_sleep] [number_of_times_each_philosopher_must_eat]\n\n";
+	tmp = get_time(philo->app->start_time);
 	if (philo == NULL && state == INVALID_ARGS)
 	{
 		printf("%s", msg[5]);
 		exit(1);
 	}
 	else if ((philo->app->stop && state == DIE))
-		printf("%5.3ld\t%d %s\n", get_time(philo->app->start_time) - 2, philo->id + 1, msg[state]);
-	else if (!philo->app->stop) 
-		printf("%5.3ld\t%d %s\n", get_time(philo->app->start_time), philo->id + 1, msg[state]);
+	{
+		if (philo->app->n_philo > 1)
+			tmp -= 2;
+		printf("%5.3ld\t%d %s\n", tmp - 1, philo->id + 1, msg[state]);
+	}
+	else if (!philo->app->stop)
+		printf("%5.3ld\t%d %s\n", \
+get_time(philo->app->start_time), philo->id + 1, msg[state]);
 }
 
 void	init_forks(t_app *app)

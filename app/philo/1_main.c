@@ -6,7 +6,7 @@
 /*   By: argel <argel@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 18:41:00 by acapela-          #+#    #+#             */
-/*   Updated: 2022/06/23 15:37:48 by argel            ###   ########.fr       */
+/*   Updated: 2022/06/24 16:00:01 by argel            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,15 +78,9 @@ void	inspector(t_philo **philo, t_app *app)
 			app->stop = 1;
 			usleep(500);
 			print(&philo[0][i], DIE);
-			pthread_mutex_unlock(&philo[0][i].app->fork[0]);
-			pthread_mutex_unlock(&philo[0][i].app->fork[1]);
-			pthread_mutex_unlock(&philo[0][i].app->fork[2]);
 		}
 		if (app->max_meals == 0)
-		{
 			app->stop = 1;
-			exit_free(philo);
-		}
 		i++;
 	}
 }
