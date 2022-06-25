@@ -10,8 +10,8 @@ RM =            rm -rfd
 
 # Mandatory
 
-SRCS_DIR =   	./
-OBJS_DIR =   	.objs
+SRCS_DIR =   	./srcs
+OBJS_DIR =   	$(SRCS_DIR)/.objects
 HEADER_DIR =   ./$(SRCS_DIR)
 HEADER =		$(HEADER_DIR)/philo.h
 NAME =			philo

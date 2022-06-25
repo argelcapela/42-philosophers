@@ -6,7 +6,7 @@
 /*   By: argel <argel@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 18:41:05 by acapela-          #+#    #+#             */
-/*   Updated: 2022/06/25 08:16:51 by argel            ###   ########.fr       */
+/*   Updated: 2022/06/25 15:35:17 by argel            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,6 @@ void	init_forks(t_app *app)
 	app->fork = malloc(app->n_philo * \
 sizeof(pthread_mutex_t));
 	i = 0;
-	pthread_mutex_init(&app->write_m, NULL);
 	while (i < app->n_philo)
 	{
 		pthread_mutex_init(&app->fork[i], NULL);
@@ -73,5 +72,4 @@ void	destroy_forks(t_app *app)
 		pthread_mutex_destroy(&app->fork[i]);
 		i++;
 	}
-	pthread_mutex_destroy(&app->write_m);
 }
