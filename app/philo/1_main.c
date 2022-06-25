@@ -6,7 +6,7 @@
 /*   By: argel <argel@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 18:41:00 by acapela-          #+#    #+#             */
-/*   Updated: 2022/06/24 16:00:01 by argel            ###   ########.fr       */
+/*   Updated: 2022/06/25 08:18:33 by argel            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,12 @@ void	init_app(t_app *app, int argc, char **argv)
 	{
 		app->max_meals_by_philo = -8;
 		app->max_meals = -8;
+	}
+	if (!app->n_philo || !app->time_to_die || !app->max_meals_by_philo
+		|| !app->time_to_eat || !app->time_to_sleep)
+	{
+		free(app);
+		print(NULL, INVALID_ARGS);
 	}
 	app->stop = 0;
 	app->start_time = get_time(0);
@@ -98,6 +104,8 @@ int	main(int argc, char **argv)
 	init_philos(&philo, &app);
 	inspector(&philo, &app);
 	ensure_threads_terminate(&philo);
-	exit_free(&philo);
+	destroy_forks(&app);
+	free(app.fork);
+	free(philo);
 	return (0);
 }

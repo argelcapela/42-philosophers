@@ -6,7 +6,7 @@
 /*   By: argel <argel@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 18:41:05 by acapela-          #+#    #+#             */
-/*   Updated: 2022/06/23 14:02:37 by argel            ###   ########.fr       */
+/*   Updated: 2022/06/25 08:16:51 by argel            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,4 +46,32 @@ int	ft_atoi(const char *str)
 		i++;
 	}
 	return (res * s);
+}
+
+void	init_forks(t_app *app)
+{
+	int	i;
+
+	app->fork = malloc(app->n_philo * \
+sizeof(pthread_mutex_t));
+	i = 0;
+	pthread_mutex_init(&app->write_m, NULL);
+	while (i < app->n_philo)
+	{
+		pthread_mutex_init(&app->fork[i], NULL);
+		i++;
+	}
+}
+
+void	destroy_forks(t_app *app)
+{
+	int	i;
+
+	i = 0;
+	while (i < app->n_philo)
+	{
+		pthread_mutex_destroy(&app->fork[i]);
+		i++;
+	}
+	pthread_mutex_destroy(&app->write_m);
 }

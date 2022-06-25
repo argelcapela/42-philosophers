@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   4_utils_2.c                                        :+:      :+:    :+:   */
+/*   2_time_bonus.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: argel <argel@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 18:41:05 by acapela-          #+#    #+#             */
-/*   Updated: 2022/06/25 08:16:40 by argel            ###   ########.fr       */
+/*   Updated: 2022/06/25 15:26:11 by argel            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <philo.h>
+#include <0_philosophers_bonus.h>
 
 /**
 * As the function name says, it return the difference between
@@ -50,46 +50,19 @@ long int	get_time(long int last_meal_or_action_time)
 }
 
 /**
-* Print error msgs or the philosophers state in theirs circle of life.
-* @param philo Memory Block where all the philos are stored.
-* @param state CONSTANT value defined in philo.h, that represent the state to be
-* printed.
-* @line 52 - '%5.3ld':
-*	- .3: It's [precision], so the number printed need to have at least 3 digits
-*	or zeros will be added before it. For example, instead of 1, will be printed
-*	001.
-*	- 5: It's [field width], so if the number printed is smaller than 5 digits
-*	will be added spaces until fill 5 digits. For example, intead of 001, will be
-*	printed "  001".
-*	- li: l converts an long(int32) value to the second letter type specified,
-*	in this case long printed as integer.
+* A function that execute the usleep but also
+* works like a monitor, always check if some philosopher
+* died, if so, finish app and print die message.
+* @param
 */
-void	print(t_philo *philo, int state)
+void		msleep(long int time_to_wait, t_philosophers *philo)
 {
-	char		*msg[6];
-	long int	tmp;
-
-	msg[0] = "has taken a fork";
-	msg[1] = "is eating";
-	msg[2] = "is sleeping";
-	msg[3] = "is thinking";
-	msg[4] = "died";
-	msg[5] = "Invalid argument, please try again! \n\nexample:\n \
-./philo [number_of_philosophers] [time_to_die] [time_to_eat] \
-[time_to_sleep] [number_of_times_each_philosopher_must_eat]\n\n";
-	if (philo == NULL && state == INVALID_ARGS)
-	{
-		printf("%s", msg[5]);
-		exit(1);
-	}
-	else if ((philo->app->stop && state == DIE))
-	{
-		tmp = get_time(philo->app->start_time);
-		if (philo->app->n_philo > 1)
-			tmp -= 2;
-		printf("%5.3ld\t%d %s\n", tmp - 1, philo->id + 1, msg[state]);
-	}
-	else if (!philo->app->stop)
-		printf("%5.3ld\t%d %s\n", \
-get_time(philo->app->start_time), philo->id + 1, msg[state]);
+	if (get_time(philo->last_meal_time) 
+		> philo->app->time_to_die)
+		{
+			philo->app->stop = 1;	
+			print(philo, DIE);
+			exit_process(philo);
+		}
+	usleep(time_to_wait);	
 }

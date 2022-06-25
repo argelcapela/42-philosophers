@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo.h                                            :+:      :+:    :+:   */
+/*   0_philosophers_bonus.h                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: argel <argel@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 18:41:09 by acapela-          #+#    #+#             */
-/*   Updated: 2022/06/25 10:23:39 by argel            ###   ########.fr       */
+/*   Updated: 2022/06/25 15:23:03 by argel            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PHILO_H
-# define PHILO_H
+#ifndef PHILOSOPHERS_BONUS_H
+# define PHILOSOPHERS_BONUS_H
 
 /**************************************************************************** #
 #                                   LIBS                                      #
@@ -26,12 +26,17 @@
 // gettimeofday
 # include <sys/time.h>
 
-// usleep
+// waitpid
+#include <sys/wait.h> 
+
+// usleep, fork
 # include <unistd.h>
 
-// t_thread, pthread_create, pthread_join
-// t_mutex, t_mutex_lock, t_mutex_unlock
-# include <pthread.h>
+// kill
+#include <signal.h> 
+
+// sem...open,close,wait,post or unlink
+#include <semaphore.h>
 
 /**************************************************************************** #
 #                                STRUCTS                                      #
@@ -43,7 +48,7 @@
 */
 typedef struct s_app
 {
-	pthread_mutex_t	*fork;
+	sem_t			*fork;
 	int				n_philo;
 	int				time_to_eat;
 	int				time_to_sleep;
@@ -59,14 +64,15 @@ typedef struct s_app
 * each philosopher.
 * @param 
 */
-typedef struct s_philo
+typedef struct s_philosophers
 {
 	int				id;
-	pthread_t		thread;
-	t_app			*app;
+	pid_t			pid;
+	int				exit_code;
 	long int		last_meal_time;
 	int				meals;
-}	t_philo;
+	t_app			*app;
+}	t_philosophers;
 
 /**************************************************************************** #
 #                                CONSTANTS                                    #
@@ -79,18 +85,32 @@ typedef struct s_philo
 # define DIE  			4
 # define INVALID_ARGS  	5
 
-void		*routine(void *p_philo);
-void		ensure_threads_terminate(t_philo **philo);
+/**************************************************************************** #
+#                                PROTOTYPES                                   #
+# ****************************************************************************/
 
+// 1
 int			ft_isdigit(int c);
 int			ft_atoi(const char *str);
-int			ft_putstr_fd(char *s, int fd);
-void		ft_putnbr_fd(long int n, int fd);
+void		print(t_philosophers *philo, int state);
+void		finish();
 
+// 2
 long int	get_time(long int start);
-void		print(t_philo *philo, int state);
-void		init_forks(t_app *app);
-void		destroy_forks(t_app *app);
-void		exit_free(t_philo **philo);
+void		msleep(long int time_to_wait, t_philosophers *philo);
+
+// 3
+void		create_process(t_philosophers *philo, void (*f)(void *));
+void		wait_processes_finish(t_philosophers **philo);
+void 		exit_process(t_philosophers *philo);
+
+// 4
+void		routine(void *p_philo);
+
+// 5
+void		init_app(t_app *app, int argc, char **argv);
+void		init_forks();
+void		init_philosophers(t_philosophers **philo, t_app *app);
+void		start_routine();
 
 #endif
