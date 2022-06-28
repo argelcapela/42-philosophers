@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   0_philosophers_bonus.h                             :+:      :+:    :+:   */
+/*   _philosophers_bonus.h                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: argel <argel@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 18:41:09 by acapela-          #+#    #+#             */
-/*   Updated: 2022/06/25 15:23:03 by argel            ###   ########.fr       */
+/*   Updated: 2022/06/28 10:23:34 by argel            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PHILOSOPHERS_BONUS_H
-# define PHILOSOPHERS_BONUS_H
+#ifndef _PHILOSOPHERS_BONUS_H
+# define _PHILOSOPHERS_BONUS_H
 
 /**************************************************************************** #
 #                                   LIBS                                      #
@@ -27,16 +27,19 @@
 # include <sys/time.h>
 
 // waitpid
-#include <sys/wait.h> 
+# include <sys/wait.h> 
 
 // usleep, fork
 # include <unistd.h>
 
 // kill
-#include <signal.h> 
+# include <signal.h> 
 
 // sem...open,close,wait,post or unlink
-#include <semaphore.h>
+# include <semaphore.h>
+
+// O_CREAT
+# include <fcntl.h>
 
 /**************************************************************************** #
 #                                STRUCTS                                      #
@@ -48,7 +51,8 @@
 */
 typedef struct s_app
 {
-	sem_t			*fork;
+	sem_t			*forks;
+	sem_t			*lock_print;
 	int				n_philo;
 	int				time_to_eat;
 	int				time_to_sleep;
@@ -93,24 +97,26 @@ typedef struct s_philosophers
 int			ft_isdigit(int c);
 int			ft_atoi(const char *str);
 void		print(t_philosophers *philo, int state);
-void		finish();
 
 // 2
 long int	get_time(long int start);
 void		msleep(long int time_to_wait, t_philosophers *philo);
 
 // 3
-void		create_process(t_philosophers *philo, void (*f)(void *));
+void		create_process(t_philosophers *philo, int (*f)(t_philosophers **));
 void		wait_processes_finish(t_philosophers **philo);
-void 		exit_process(t_philosophers *philo);
 
 // 4
-void		routine(void *p_philo);
+int			routine(t_philosophers **p_philo);
 
 // 5
 void		init_app(t_app *app, int argc, char **argv);
-void		init_forks();
+void		init_forks(t_philosophers **philo);
 void		init_philosophers(t_philosophers **philo, t_app *app);
-void		start_routine();
+void		start_routine(t_philosophers **philo);
+
+// 6
+void		exit_app(t_philosophers *philo);
+void		stop_routine(t_philosophers *philo, int exit_code);
 
 #endif

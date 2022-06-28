@@ -13,7 +13,7 @@ RM =            rm -rfd
 SRCS_DIR =   	./srcs_bonus
 OBJS_DIR =   	$(SRCS_DIR)/.objects_bonus
 HEADER_DIR =   ./$(SRCS_DIR)
-HEADER =		$(HEADER_DIR)/0_philosophers_bonus.h
+HEADER =		$(HEADER_DIR)/_philosophers_bonus.h
 NAME =			philo_bonus
 
 SRCS_FILES =	1_utils_bonus.c \
@@ -21,7 +21,8 @@ SRCS_FILES =	1_utils_bonus.c \
 				3_processes_bonus.c \
 				4_routine_bonus.c \
 				5_init_bonus.c \
-				6_main_bonus.c
+				6_main_bonus.c \
+				7_exit_bonus.c
 
 SRCS = 			$(addprefix $(SRCS_DIR)/, $(SRCS_FILES))
 OBJS =          $(SRCS:$(SRCS_DIR)/%.c=$(OBJS_DIR)/%.o)
