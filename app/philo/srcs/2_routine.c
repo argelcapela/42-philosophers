@@ -66,8 +66,8 @@ void	*routine(void *p_philo)
 	int		time_to_think;
 
 	philo = p_philo;
-	time_to_think = philo->app->time_to_eat;
-	if ((philo->id % 2) != 0)
+	time_to_think = 3000;
+	if (philo->id % 2)
 		philo_think(philo, time_to_think);
 	while (!philo->app->stop)
 	{

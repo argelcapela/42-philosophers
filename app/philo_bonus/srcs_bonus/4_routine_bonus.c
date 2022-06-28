@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   4_routine_bonus.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: argel <argel@student.42.fr>                +#+  +:+       +#+        */
+/*   By: acapela- <acapela-@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 18:41:05 by acapela-          #+#    #+#             */
-/*   Updated: 2022/06/28 10:50:22 by argel            ###   ########.fr       */
+/*   Updated: 2022/06/28 21:46:13 by acapela-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,6 @@ static int	go_eat(t_philosophers *philo)
 {
 	print(philo, FORK);
 	sem_wait(philo->app->forks);
-	if (philo->app->n_philo == 1)
-		return (1);
 	sem_wait(philo->app->forks);
 	print(philo, FORK);
 	print(philo, EAT);
@@ -54,10 +52,12 @@ int	routine(t_philosophers **p_philo)
 	time_to_think = philo->app->time_to_eat;
 	if (philo->id % 2)
 		go_think(philo, time_to_think);
+	msleep(10 ,philo);
 	while (1)
 	{
-		if (philo->meals == 0 || go_eat(philo))
+		if (philo->meals == 0)
 			stop_routine(philo, 0);
+		go_eat(philo);
 		go_sleep(philo);
 		go_think(philo, 0);
 	}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   4_utils_2.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: argel <argel@student.42.fr>                +#+  +:+       +#+        */
+/*   By: acapela- <acapela-@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 18:41:05 by acapela-          #+#    #+#             */
-/*   Updated: 2022/06/25 08:16:40 by argel            ###   ########.fr       */
+/*   Updated: 2022/06/28 18:58:40 by acapela-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,6 @@ long int	get_time(long int last_meal_or_action_time)
 void	print(t_philo *philo, int state)
 {
 	char		*msg[6];
-	long int	tmp;
 
 	msg[0] = "has taken a fork";
 	msg[1] = "is eating";
@@ -82,14 +81,6 @@ void	print(t_philo *philo, int state)
 		printf("%s", msg[5]);
 		exit(1);
 	}
-	else if ((philo->app->stop && state == DIE))
-	{
-		tmp = get_time(philo->app->start_time);
-		if (philo->app->n_philo > 1)
-			tmp -= 2;
-		printf("%5.3ld\t%d %s\n", tmp - 1, philo->id + 1, msg[state]);
-	}
-	else if (!philo->app->stop)
-		printf("%5.3ld\t%d %s\n", \
-get_time(philo->app->start_time), philo->id + 1, msg[state]);
+	else if ((philo->app->stop && state == DIE) || !philo->app->stop)
+		printf("%5.3ld\t%d %s\n", get_time(philo->app->start_time), philo->id + 1, msg[state]);
 }

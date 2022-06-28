@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   1_main.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: argel <argel@student.42.fr>                +#+  +:+       +#+        */
+/*   By: acapela- <acapela-@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 18:41:00 by acapela-          #+#    #+#             */
-/*   Updated: 2022/06/25 08:18:33 by argel            ###   ########.fr       */
+/*   Updated: 2022/06/28 22:01:02 by acapela-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,12 +79,14 @@ void	inspector(t_philo **philo, t_app *app)
 			usleep(50);
 			i = 0;
 		}
+		//pthread_mutex_lock(philo[0][i].app->lock_time);
 		if (get_time(philo[0][i].last_meal_time) > app->time_to_die)
 		{
 			app->stop = 1;
 			usleep(500);
 			print(&philo[0][i], DIE);
 		}
+		//pthread_mutex_unlock(philo[0][i].app->lock_time);
 		if (app->max_meals == 0)
 			app->stop = 1;
 		i++;

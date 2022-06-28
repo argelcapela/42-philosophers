@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   2_time_bonus.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: argel <argel@student.42.fr>                +#+  +:+       +#+        */
+/*   By: acapela- <acapela-@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 18:41:05 by acapela-          #+#    #+#             */
-/*   Updated: 2022/06/28 10:34:46 by argel            ###   ########.fr       */
+/*   Updated: 2022/06/28 21:43:45 by acapela-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,22 @@ long int	get_time(long int last_meal_or_action_time)
 */
 void	msleep(long int time_to_wait, t_philosophers *philo)
 {
-	if (get_time(philo->last_meal_time) > philo->app->time_to_die)
+	long int die_time;
+
+	if (philo->app->n_philo == 1)
 	{
 		print(philo, DIE);
 		stop_routine(philo, 1);
 	}
-	usleep(time_to_wait);
+	while (time_to_wait > 0)
+	{
+		time_to_wait -= 10;
+		usleep(10);
+		die_time = get_time(philo->last_meal_time) - 1;
+		if (die_time > philo->app->time_to_die)
+		{
+			print(philo, DIE);
+			stop_routine(philo, 1);
+		}
+	}
 }

@@ -4,9 +4,7 @@
 CC =            clang
 CFLAGS = 		-Wall -Wextra -Werror -ggdb3
 PTHFLAG =		-pthread
-AR =            ar -rcs
 RM =            rm -rfd
-
 
 # Bonus
 
@@ -32,7 +30,7 @@ $(OBJS_DIR)/%.o:	$(SRCS_DIR)/%.c
 all:	$(NAME)
 
 $(NAME):	$(OBJS_DIR) $(OBJS) $(HEADER)
-	$(CC) -I$(HEADER_DIR) $(CFLAGS) $(OBJS) -o $(NAME)
+	$(CC) -I$(HEADER_DIR) $(CFLAGS) $(OBJS) -o $(NAME) $(PTHFLAG)
 	@echo -e "\e[1;32mBONUS COMPILED SUCCESFULY!\e[0m"
 
 $(OBJS_DIR):
