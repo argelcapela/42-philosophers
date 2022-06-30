@@ -6,91 +6,76 @@
 /*   By: argel <argel@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 18:41:05 by acapela-          #+#    #+#             */
-/*   Updated: 2022/06/29 21:49:25 by argel            ###   ########.fr       */
+/*   Updated: 2022/06/30 13:49:14 by argel            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <_philosophers_bonus.h>
 
 /**
-* Return the difference between current_time and some 'start_time'
+* Get current system time, since January, 1, 1970, 
 * in miliseconds.
-*
-* @param 
+* @link ...
 */
-long int	get_time(long int last_meal_or_action_time)
+long	time_now(void)
 {
-	struct timeval	tv;
-	long int		secon_to_mili;
-	long int		micro_to_mili;
-	long int		current_time;
+	struct timeval	timeval;
+	long int		time_now;
+	long int		seconds_to_miliseconds;
+	long int		microseconds_to_miliseconds;
 
-	gettimeofday(&tv, NULL);
-	secon_to_mili = tv.tv_sec * 1000;
-	micro_to_mili = tv.tv_usec / 1000;
-	current_time = secon_to_mili + micro_to_mili;
-	if (last_meal_or_action_time != 0)
-		current_time -= last_meal_or_action_time;
-	return (current_time);
+	gettimeofday(&timeval, NULL);
+	seconds_to_miliseconds = timeval.tv_sec * 1000;
+	microseconds_to_miliseconds = timeval.tv_usec / 1000;
+	time_now = seconds_to_miliseconds + microseconds_to_miliseconds;
+	return (time_now);
 }
 
-long	timestamp(void)
-{
-	struct timeval	time;
-
-	gettimeofday(&time, NULL);
-	return ((time.tv_sec * 1000) + (time.tv_usec / 1000));
+/**
+* Calculates how many 'miliseconds' has passed 
+* from [start_time] until [time_now (the current
+* system time)].
+* @return difference between start_time and
+* time_now in miliseconds.
+*/
+long	get_time_passed_since(long start_time)
+{	
+	return (time_now() - start_time);
 }
 
-long	timenow(long firststamp)
+void	check_starvation(t_philosophers *philo)
 {
-	return (timestamp() - firststamp);
-}
+	long	curr_time_since_start_time;
+	long	time_since_last_meal;
 
-void	msleep(int time_in_ms)
-{
-	long	start_time;
-
-	start_time = timestamp();
-	while ((timestamp() - start_time) < (long)time_in_ms)
-		usleep(10);
-}
-
-void	dsleep(int time_in_ms, t_philosophers *philo)
-{
-	long	current_time;
-	long	start_time;
-
-	start_time = timestamp();
-	while ((timestamp() - start_time) < (long)time_in_ms)
+	curr_time_since_start_time = \
+		get_time_passed_since(philo->app->start_time);
+	time_since_last_meal = \
+		(curr_time_since_start_time - philo->last_meal_time);
+	if (time_since_last_meal > philo->app->time_to_die)
 	{
-		usleep(10);
-		current_time = timenow(philo->app->start_time);
-		if ((current_time - philo->last_meal_time) > philo->app->time_to_die)
-		{
-			print(philo, DIE);
-			stop_routine(philo, 1);
-		}
+		print(philo, DIE);
+		exit_process(philo, 1);
 	}
 }
 
-// /**
-// * A function that execute the usleep but also
-// * works like a monitor, always check if some philosopher
-// * died, if so, finish app and print die message.
-// *
-// * @param
-// */
-// void	msleep(int time_to_wait, t_philosopherssophers *philo)
-// {
-// 	while (time_to_wait)
-// 	{	
-// 		if (get_time(0) > philo->limit)
-// 		{
-// 			print(philo, DIE);
-// 			stop_routine(philo, 1);
-// 		}
-// 		usleep(10);
-// 		time_to_wait -= 10;
-// 	}
-// }
+/**
+* Stop the process during [long time_to_wait] microseconds.
+* Each 10 microseconds is checked is some philo died.
+* @param time_to_wait in microseconds or x (miliseconds) * 1000
+* @param philo pointer to variable holding philosophers
+* @line 59-60:Get time that msleep was executed and holds in start_time;
+* Loop executes, usleeping 10 in 10, while start_time was not
+* achieved yet;
+*/
+void	msleep(long time_to_wait, t_philosophers *philo)
+{
+	long	start_time;
+
+	start_time = time_now();
+	while (get_time_passed_since(start_time) < time_to_wait)
+	{
+		usleep(10);
+		check_starvation(philo);
+	}
+}

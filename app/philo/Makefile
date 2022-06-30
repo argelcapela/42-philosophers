@@ -22,7 +22,8 @@ SRCS_FILES =	1_utils.c \
 				4_routine.c \
 				5_monitor.c \
 				6_init.c \
-				7_main.c
+				7_main.c \
+				8_exit.c
 
 SRCS = 			$(addprefix $(SRCS_DIR)/, $(SRCS_FILES))
 OBJS =          $(SRCS:$(SRCS_DIR)/%.c=$(OBJS_DIR)/%.o)

@@ -6,28 +6,26 @@
 /*   By: argel <argel@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/27 10:00:28 by argel             #+#    #+#             */
-/*   Updated: 2022/06/29 21:47:28 by argel            ###   ########.fr       */
+/*   Updated: 2022/06/30 12:52:55 by argel            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <_philosophers_bonus.h>
 
-void	exit_app(t_philosophers *philo)
+void	exit_app(t_app *app)
 {
-	sem_close(philo->app->lock_print);
-	sem_close(philo->app->forks);
+	sem_close(app->lock_print);
+	sem_close(app->forks);
 	sem_unlink("/lock_print");
 	sem_unlink("/forks");
-	free(philo);
 	exit(0);
 }
 
-void	stop_routine(t_philosophers *philo, int exit_code)
+void	exit_process(t_philosophers *philo, int exit_code)
 {
 	sem_close(philo->app->lock_print);
 	sem_close(philo->app->forks);
 	sem_unlink("/lock_print");
 	sem_unlink("/forks");
-	free(philo);
 	exit(exit_code);
 }

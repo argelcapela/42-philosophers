@@ -6,45 +6,39 @@
 /*   By: argel <argel@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 18:41:05 by acapela-          #+#    #+#             */
-/*   Updated: 2022/06/29 21:58:20 by argel            ###   ########.fr       */
+/*   Updated: 2022/06/30 11:36:35 by argel            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <_philo.h>
 
 /**
-* As the function name says, it return the difference between
-* current time in miliseconds and app->start_time (stored at 
-* the beginning) also in miliseconds. It is used in each print
-* of philo_circle_of_life creating allowing to print the exact
-* miliseconds that each action was executed since the start of
-* the application, always increasing until the app terminate.
-*
-*	- epoch: 1970, 00:00:00, Unix standard date.
-*	- gettimeofday: get amount of microseconds from EPOCH until
-*	your current time.
-*	- timer.tv_sec: seconds
-*	- timer.tv_usec: miliseconds
-* @param timer struct that store the result from gettimeofday
-* @param start_time generaly will be the app->start_time value
-* which is the time application started, or zero, when this func-
-* be called for the first time.
-* @param current_time is literaly the current_time of the system
-* @line 42 
-* @line 43
+* Get current system time, since January, 1, 1970, 
+* in miliseconds.
+* @link ...
 */
-long int	get_time(long int last_meal_or_action_time)
+long int	time_now(void)
 {
-	struct timeval	tv;
-	long int		secon_to_mili;
-	long int		micro_to_mili;
-	long int		current_time;
+	struct timeval	timeval;
+	long int		time_now;
+	long int		seconds_to_miliseconds;
+	long int		microseconds_to_miliseconds;
 
-	gettimeofday(&tv, NULL);
-	secon_to_mili = tv.tv_sec * 1000;
-	micro_to_mili = tv.tv_usec / 1000;
-	current_time = secon_to_mili + micro_to_mili;
-	if (last_meal_or_action_time != 0)
-		current_time -= last_meal_or_action_time;
-	return (current_time);
+	gettimeofday(&timeval, NULL);
+	seconds_to_miliseconds = timeval.tv_sec * 1000;
+	microseconds_to_miliseconds = timeval.tv_usec / 1000;
+	time_now = seconds_to_miliseconds + microseconds_to_miliseconds;
+	return (time_now);
+}
+
+/**
+* Calculates how many 'miliseconds' has passed 
+* from [start_time] until [time_now (the current
+* system time)].
+* @return difference between start_time and
+* time_now in miliseconds.
+*/
+long int	get_time_passed_since(long int start_time)
+{	
+	return (time_now() - start_time);
 }

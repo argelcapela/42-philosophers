@@ -6,7 +6,7 @@
 /*   By: argel <argel@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 18:41:09 by acapela-          #+#    #+#             */
-/*   Updated: 2022/06/29 21:45:51 by argel            ###   ########.fr       */
+/*   Updated: 2022/06/30 13:43:12 by argel            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,8 @@ typedef struct s_philosophers
 	int				meals;
 	int				name;
 	t_app			*app;
+	sem_t			**right_fork;
+	sem_t			**left_fork;
 }	t_philosophers;
 
 /**************************************************************************** #
@@ -101,11 +103,10 @@ int			ft_atoi(const char *str);
 void		print(t_philosophers *philo, int state);
 
 // 2
-long int	get_time(long int start);
-void		dsleep(int time_in_ms, t_philosophers *philo);
-void		msleep(int time_in_ms);
-long		timestamp(void);
-long		timenow(long firststamp);
+long		time_now(void);
+long		get_time_passed_since(long start_time);
+void		check_starvation(t_philosophers *philo);
+void		msleep(long time_to_wait, t_philosophers *philo);
 
 // 3
 void		create_process(t_philosophers *philo, int (*f)(t_philosophers **));
@@ -118,11 +119,10 @@ int			routine(t_philosophers **p_philo);
 void		init_app(t_app *app, int argc, char **argv);
 void		init_forks(t_philosophers **philo);
 void		init_philosophers(t_philosophers **philo, t_app *app);
-void		monitor(t_philosophers **philo, t_app *app);
 void		start_routine(t_philosophers **philo);
 
 // 6
-void		exit_app(t_philosophers *philo);
-void		stop_routine(t_philosophers *philo, int exit_code);
+void		exit_app(t_app *app);
+void		exit_process(t_philosophers *philo, int exit_code);
 
 #endif

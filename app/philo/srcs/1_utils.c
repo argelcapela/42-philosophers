@@ -6,7 +6,7 @@
 /*   By: argel <argel@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 18:41:05 by acapela-          #+#    #+#             */
-/*   Updated: 2022/06/29 22:06:01 by argel            ###   ########.fr       */
+/*   Updated: 2022/06/30 09:52:55 by argel            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,21 +49,12 @@ int	ft_atoi(const char *str)
 }
 
 /**
-* Print error msgs or the philosophers state in theirs circle of life.
-* @param philo Memory Block where all the philos are stored.
-* @param state CONSTANT value defined in philo.h, that represent the state to be
-* printed.
-* @line 52 - '%5.3ld':
-*	- .3: It's [precision], so the number printed need to have at least 3 digits
-*	or zeros will be added before it. For example, instead of 1, will be printed
-*	001.
-*	- 5: It's [field width], so if the number printed is smaller than 5 digits
-*	will be added spaces until fill 5 digits. For example, intead of 001, will be
-*	printed "  001".
-*	- li: l converts an long(int32) value to the second letter type specified,
-*	in this case long printed as integer.
+* Print error msgs or the philosophers state, during
+* philosphers routine execution.
+* @param philo pointer to the varible holding all philosophers
+* @param state constant int variable that indicades the state
 */
-void	print(t_philo *philo, int state)
+void	print(t_philosophers *philo, int state)
 {
 	char		*msg[6];
 
@@ -81,6 +72,6 @@ void	print(t_philo *philo, int state)
 		exit(1);
 	}
 	else if ((philo->app->stop && state == DIE) || !philo->app->stop)
-		printf("%5.3ld\t%d %s\n", get_time(philo->app->start_time), \
+		printf("%5.3ld\t%d %s\n", get_time_passed_since(philo->app->start_time), \
 philo->id + 1, msg[state]);
 }

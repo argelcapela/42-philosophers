@@ -6,7 +6,7 @@
 /*   By: argel <argel@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/25 11:45:42 by argel             #+#    #+#             */
-/*   Updated: 2022/06/29 11:39:24 by argel            ###   ########.fr       */
+/*   Updated: 2022/06/30 12:42:23 by argel            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	create_process(t_philosophers *philo, int (*f)(t_philosophers **))
 	if (philo->pid == 0)
 	{
 		exit_code = f(&philo);
-		stop_routine(philo, exit_code);
+		exit_process(philo, exit_code);
 	}
 }
 

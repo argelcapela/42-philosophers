@@ -6,13 +6,13 @@
 /*   By: argel <argel@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/29 21:58:54 by argel             #+#    #+#             */
-/*   Updated: 2022/06/29 22:05:39 by argel            ###   ########.fr       */
+/*   Updated: 2022/06/30 09:53:20 by argel            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <_philo.h>
 
-void	monitor(t_philo **philo, t_app *app)
+void	monitor(t_philosophers **philo, t_app *app)
 {
 	int	i;
 
@@ -24,7 +24,8 @@ void	monitor(t_philo **philo, t_app *app)
 			usleep(50);
 			i = 0;
 		}
-		if (get_time(philo[0][i].last_meal_time) > app->time_to_die)
+		if (get_time_passed_since(philo[0][i].last_meal_time)
+		> app->time_to_die)
 		{
 			app->stop = 1;
 			usleep(500);
