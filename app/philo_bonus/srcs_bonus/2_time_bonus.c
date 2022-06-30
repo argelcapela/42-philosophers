@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   2_time_bonus.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: acapela- <acapela-@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: argel <argel@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 18:41:05 by acapela-          #+#    #+#             */
-/*   Updated: 2022/06/28 21:43:45 by acapela-         ###   ########.fr       */
+/*   Updated: 2022/06/29 21:49:25 by argel            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <_philosophers_bonus.h>
-#include <stdint.h>
 
 /**
 * Return the difference between current_time and some 'start_time'
@@ -35,31 +34,63 @@ long int	get_time(long int last_meal_or_action_time)
 	return (current_time);
 }
 
-/**
-* A function that execute the usleep but also
-* works like a monitor, always check if some philosopher
-* died, if so, finish app and print die message.
-*
-* @param
-*/
-void	msleep(long int time_to_wait, t_philosophers *philo)
+long	timestamp(void)
 {
-	long int die_time;
+	struct timeval	time;
 
-	if (philo->app->n_philo == 1)
-	{
-		print(philo, DIE);
-		stop_routine(philo, 1);
-	}
-	while (time_to_wait > 0)
-	{
-		time_to_wait -= 10;
+	gettimeofday(&time, NULL);
+	return ((time.tv_sec * 1000) + (time.tv_usec / 1000));
+}
+
+long	timenow(long firststamp)
+{
+	return (timestamp() - firststamp);
+}
+
+void	msleep(int time_in_ms)
+{
+	long	start_time;
+
+	start_time = timestamp();
+	while ((timestamp() - start_time) < (long)time_in_ms)
 		usleep(10);
-		die_time = get_time(philo->last_meal_time) - 1;
-		if (die_time > philo->app->time_to_die)
+}
+
+void	dsleep(int time_in_ms, t_philosophers *philo)
+{
+	long	current_time;
+	long	start_time;
+
+	start_time = timestamp();
+	while ((timestamp() - start_time) < (long)time_in_ms)
+	{
+		usleep(10);
+		current_time = timenow(philo->app->start_time);
+		if ((current_time - philo->last_meal_time) > philo->app->time_to_die)
 		{
 			print(philo, DIE);
 			stop_routine(philo, 1);
 		}
 	}
 }
+
+// /**
+// * A function that execute the usleep but also
+// * works like a monitor, always check if some philosopher
+// * died, if so, finish app and print die message.
+// *
+// * @param
+// */
+// void	msleep(int time_to_wait, t_philosopherssophers *philo)
+// {
+// 	while (time_to_wait)
+// 	{	
+// 		if (get_time(0) > philo->limit)
+// 		{
+// 			print(philo, DIE);
+// 			stop_routine(philo, 1);
+// 		}
+// 		usleep(10);
+// 		time_to_wait -= 10;
+// 	}
+// }

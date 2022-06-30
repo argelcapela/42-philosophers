@@ -11,15 +11,18 @@ RM =            rm -rfd
 # Mandatory
 
 SRCS_DIR =   	./srcs
-OBJS_DIR =   	$(SRCS_DIR)/.objects
+OBJS_DIR =   	.objs
 HEADER_DIR =   ./$(SRCS_DIR)
-HEADER =		$(HEADER_DIR)/philo.h
+HEADER =		$(HEADER_DIR)/_philo.h
 NAME =			philo
 
-SRCS_FILES =	1_main.c \
-				2_routine.c \
-				3_utils_1.c \
-				4_utils_2.c
+SRCS_FILES =	1_utils.c \
+				2_time.c \
+				3_threads_mutexes.c \
+				4_routine.c \
+				5_monitor.c \
+				6_init.c \
+				7_main.c
 
 SRCS = 			$(addprefix $(SRCS_DIR)/, $(SRCS_FILES))
 OBJS =          $(SRCS:$(SRCS_DIR)/%.c=$(OBJS_DIR)/%.o)

@@ -6,7 +6,7 @@
 /*   By: argel <argel@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 18:41:05 by acapela-          #+#    #+#             */
-/*   Updated: 2022/06/28 10:29:25 by argel            ###   ########.fr       */
+/*   Updated: 2022/06/29 21:48:17 by argel            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ For example, instead of 1, will be printed 001.
 void	print(t_philosophers *philo, int state)
 {
 	char		*msg[6];
+	long int	current_time;
 
 	sem_wait(philo->app->lock_print);
 	msg[0] = "has taken a fork";
@@ -79,10 +80,15 @@ void	print(t_philosophers *philo, int state)
 ./philo [number_of_philosophers] [time_to_die] [time_to_eat] \
 [time_to_sleep] [number_of_times_each_philosopher_must_eat]\n\n";
 	if (philo == NULL && state == INVALID_ARGS)
+	{
 		printf("%s", msg[5]);
+		exit(1);
+	}
 	else
-		printf("%5.3ld\t%d %s\n", get_time(philo->app->start_time), \
-philo->id + 1, msg[state]);
+	{
+		current_time = timenow(philo->app->start_time);
+		printf("%5ld\t%d %s\n", current_time, philo->id + 1, msg[state]);
+	}
 	if (state != DIE)
 		sem_post(philo->app->lock_print);
 }

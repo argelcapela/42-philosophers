@@ -1,29 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   6_main_bonus.c                                     :+:      :+:    :+:   */
+/*   5_monitor.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: argel <argel@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/06/15 18:41:00 by acapela-          #+#    #+#             */
-/*   Updated: 2022/06/29 20:07:30 by argel            ###   ########.fr       */
+/*   Created: 2022/06/29 21:58:54 by argel             #+#    #+#             */
+/*   Updated: 2022/06/29 22:05:39 by argel            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <_philosophers_bonus.h>
+#include <_philo.h>
 
-int	main(int argc, char **argv)
+void	monitor(t_philo **philo, t_app *app)
 {
-	t_app			app;
-	t_philosophers	*philo;
+	int	i;
 
-	if (argc < 5 || argc > 6)
-		print(NULL, INVALID_ARGS);
-	init_app(&app, argc, argv);
-	philo = malloc(app.n_philo * sizeof(t_philosophers));
-	init_philosophers(&philo, &app);
-	init_forks(&philo);
-	start_routine(&philo);
-	exit_app(philo);
-	return (0);
+	i = 0;
+	while (!app->stop)
+	{
+		if (i == (app->n_philo))
+		{
+			usleep(50);
+			i = 0;
+		}
+		if (get_time(philo[0][i].last_meal_time) > app->time_to_die)
+		{
+			app->stop = 1;
+			usleep(500);
+			print(&philo[0][i], DIE);
+		}
+		if (app->max_meals == 0)
+			app->stop = 1;
+		i++;
+	}
 }

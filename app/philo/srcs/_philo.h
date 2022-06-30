@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo.h                                            :+:      :+:    :+:   */
+/*   _philo.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: acapela- <acapela-@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: argel <argel@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 18:41:09 by acapela-          #+#    #+#             */
-/*   Updated: 2022/06/28 21:59:53 by acapela-         ###   ########.fr       */
+/*   Updated: 2022/06/29 22:06:17 by argel            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PHILO_H
-# define PHILO_H
+#ifndef _PHILO_H
+# define _PHILO_H
 
 /**************************************************************************** #
 #                                   LIBS                                      #
@@ -80,18 +80,31 @@ typedef struct s_philo
 # define DIE  			4
 # define INVALID_ARGS  	5
 
-void		*routine(void *p_philo);
-void		ensure_threads_terminate(t_philo **philo);
+/**************************************************************************** #
+#                                PROTOTYPES                                   #
+# ****************************************************************************/
 
+// 1
 int			ft_isdigit(int c);
 int			ft_atoi(const char *str);
-int			ft_putstr_fd(char *s, int fd);
-void		ft_putnbr_fd(long int n, int fd);
-
-long int	get_time(long int start);
 void		print(t_philo *philo, int state);
-void		init_forks(t_app *app);
+
+// 2
+long int	get_time(long int start);
+
+// 3
 void		destroy_forks(t_app *app);
-void		exit_free(t_philo **philo);
+void		ensure_threads_terminate(t_philo **philo);
+
+// 4
+void		*routine(void *p_philo);
+
+// 5
+void		monitor(t_philo **philo, t_app *app);
+
+// 6
+void		init_app(t_app *app, int argc, char **argv);
+void		init_forks(t_app *app);
+void		init_philos(t_philo **philo, t_app *app);
 
 #endif

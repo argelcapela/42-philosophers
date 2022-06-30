@@ -6,7 +6,7 @@
 /*   By: argel <argel@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/28 10:50:48 by argel             #+#    #+#             */
-/*   Updated: 2022/06/28 10:51:50 by argel            ###   ########.fr       */
+/*   Updated: 2022/06/29 21:46:50 by argel            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	init_app(t_app *app, int argc, char **argv)
 		print(NULL, INVALID_ARGS);
 	}
 	app->stop = 0;
-	app->start_time = get_time(0);
+	app->start_time = 0;
 	app->lock_print = sem_open("/lock_print", O_CREAT, 777, 1);
 }
 
@@ -58,8 +58,9 @@ void	init_philosophers(t_philosophers **philo, t_app *app)
 	{
 		philo[0][i].app = app;
 		philo[0][i].id = i;
+		philo[0][i].name = i + 1;
 		philo[0][i].meals = philo[0][i].app->max_meals_by_philo;
-		philo[0][i].last_meal_time = get_time(0);
+		philo[0][i].last_meal_time = 0;
 		i++;
 	}
 }
@@ -71,6 +72,7 @@ void	start_routine(t_philosophers **philo)
 
 	n_philo = philo[0][0].app->n_philo;
 	i = -1;
+	philo[0][0].app->start_time = timestamp();
 	while (++i < n_philo)
 		create_process(&philo[0][i], &routine);
 	wait_processes_finish(philo);

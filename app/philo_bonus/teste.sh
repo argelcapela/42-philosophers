@@ -1,7 +1,7 @@
 #!/bin/bash
 # make -C philo_bonus && clear
 # exe=./philo_bonus/philo_bonus
-make -C philo && clear
+make re -C philo && clear
 exe=./philo_bonus
 
 tests=10
@@ -187,5 +187,3 @@ do
 done
 
 echo
-
-make -C ./philo fclean

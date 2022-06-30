@@ -1,33 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   7_exit_bonus.c                                     :+:      :+:    :+:   */
+/*   7_main.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: argel <argel@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/06/27 10:00:28 by argel             #+#    #+#             */
-/*   Updated: 2022/06/29 21:47:28 by argel            ###   ########.fr       */
+/*   Created: 2022/06/15 18:41:00 by acapela-          #+#    #+#             */
+/*   Updated: 2022/06/29 22:03:56 by argel            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <_philosophers_bonus.h>
+#include <_philo.h>
 
-void	exit_app(t_philosophers *philo)
+int	main(int argc, char **argv)
 {
-	sem_close(philo->app->lock_print);
-	sem_close(philo->app->forks);
-	sem_unlink("/lock_print");
-	sem_unlink("/forks");
-	free(philo);
-	exit(0);
-}
+	t_app	app;
+	t_philo	*philo;
 
-void	stop_routine(t_philosophers *philo, int exit_code)
-{
-	sem_close(philo->app->lock_print);
-	sem_close(philo->app->forks);
-	sem_unlink("/lock_print");
-	sem_unlink("/forks");
+	if (argc < 5 || argc > 6)
+		print(NULL, INVALID_ARGS);
+	init_app(&app, argc, argv);
+	philo = malloc(app.n_philo * sizeof(t_philo));
+	init_forks(&app);
+	init_philos(&philo, &app);
+	monitor(&philo, &app);
+	ensure_threads_terminate(&philo);
+	destroy_forks(&app);
+	free(app.fork);
 	free(philo);
-	exit(exit_code);
+	return (0);
 }

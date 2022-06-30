@@ -9,7 +9,7 @@ RM =            rm -rfd
 # Bonus
 
 SRCS_DIR =   	./srcs_bonus
-OBJS_DIR =   	$(SRCS_DIR)/.objects_bonus
+OBJS_DIR =   	.objs_bonus
 HEADER_DIR =   ./$(SRCS_DIR)
 HEADER =		$(HEADER_DIR)/_philosophers_bonus.h
 NAME =			philo_bonus

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   4_routine_bonus.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: acapela- <acapela-@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: argel <argel@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 18:41:05 by acapela-          #+#    #+#             */
-/*   Updated: 2022/06/28 21:46:13 by acapela-         ###   ########.fr       */
+/*   Updated: 2022/06/29 21:48:43 by argel            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,52 +14,70 @@
 
 static int	go_eat(t_philosophers *philo)
 {
+	sem_wait(philo->app->forks);
+	sem_wait(philo->app->forks);
 	print(philo, FORK);
-	sem_wait(philo->app->forks);
-	sem_wait(philo->app->forks);
 	print(philo, FORK);
 	print(philo, EAT);
-	philo->last_meal_time = get_time(0);
-	usleep(philo->app->time_to_eat * 1000);
+	philo->last_meal_time = timenow(philo->app->start_time);
+	dsleep(philo->app->time_to_eat, philo);
+	sem_post(philo->app->forks);
+	sem_post(philo->app->forks);
 	philo->meals--;
 	philo->app->max_meals--;
-	sem_post(philo->app->forks);
-	sem_post(philo->app->forks);
 	return (0);
 }
 
 static int	go_sleep(t_philosophers *philo)
 {
 	print(philo, SLEEP);
-	msleep(philo->app->time_to_sleep * 1000, philo);
+	dsleep(philo->app->time_to_sleep, philo);
 	return (0);
 }
 
-static int	go_think(t_philosophers *philo, int time)
+void	sem_try_wait(t_philosophers *philo)
+{
+	long	current_time;
+
+	while (*(long *)philo->app->forks < 2)
+	{
+		current_time = timenow(philo->app->start_time);
+		if ((current_time - philo->last_meal_time) > philo->app->time_to_die)
+		{
+			print(philo, DIE);
+			stop_routine(philo, 1);
+		}
+		usleep(10);
+	}
+}
+
+static int	go_think(t_philosophers *philo)
 {
 	print(philo, THINK);
-	if (time != 0)
-		usleep(time);
+	usleep(500);
+	sem_try_wait(philo);
 	return (0);
 }
 
 int	routine(t_philosophers **p_philo)
 {	
 	t_philosophers	*philo;
-	int				time_to_think;
 
 	philo = *p_philo;
-	time_to_think = philo->app->time_to_eat;
-	if (philo->id % 2)
-		go_think(philo, time_to_think);
-	msleep(10 ,philo);
+	if (philo->name % 2 == 0)
+		msleep(5);
+	if (philo->app->n_philo == 1)
+	{
+		print(philo, DIE);
+		stop_routine(philo, 1);
+	}
 	while (1)
 	{
+		go_eat(philo);
 		if (philo->meals == 0)
 			stop_routine(philo, 0);
-		go_eat(philo);
 		go_sleep(philo);
-		go_think(philo, 0);
+		go_think(philo);
 	}
 	return (0);
 }

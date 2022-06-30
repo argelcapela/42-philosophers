@@ -6,7 +6,7 @@
 /*   By: argel <argel@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 18:41:09 by acapela-          #+#    #+#             */
-/*   Updated: 2022/06/28 10:23:34 by argel            ###   ########.fr       */
+/*   Updated: 2022/06/29 21:45:51 by argel            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@
 */
 typedef struct s_app
 {
+	sem_t			*lock_time;
 	sem_t			*forks;
 	sem_t			*lock_print;
 	int				n_philo;
@@ -75,6 +76,7 @@ typedef struct s_philosophers
 	int				exit_code;
 	long int		last_meal_time;
 	int				meals;
+	int				name;
 	t_app			*app;
 }	t_philosophers;
 
@@ -100,7 +102,10 @@ void		print(t_philosophers *philo, int state);
 
 // 2
 long int	get_time(long int start);
-void		msleep(long int time_to_wait, t_philosophers *philo);
+void		dsleep(int time_in_ms, t_philosophers *philo);
+void		msleep(int time_in_ms);
+long		timestamp(void);
+long		timenow(long firststamp);
 
 // 3
 void		create_process(t_philosophers *philo, int (*f)(t_philosophers **));
@@ -113,6 +118,7 @@ int			routine(t_philosophers **p_philo);
 void		init_app(t_app *app, int argc, char **argv);
 void		init_forks(t_philosophers **philo);
 void		init_philosophers(t_philosophers **philo, t_app *app);
+void		monitor(t_philosophers **philo, t_app *app);
 void		start_routine(t_philosophers **philo);
 
 // 6
