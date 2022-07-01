@@ -6,7 +6,7 @@
 /*   By: argel <argel@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 18:41:05 by acapela-          #+#    #+#             */
-/*   Updated: 2022/06/30 11:36:35 by argel            ###   ########.fr       */
+/*   Updated: 2022/06/30 20:31:27 by argel            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,12 @@
 * in miliseconds.
 * @link ...
 */
-long int	time_now(void)
+long	time_now(void)
 {
 	struct timeval	timeval;
-	long int		time_now;
-	long int		seconds_to_miliseconds;
-	long int		microseconds_to_miliseconds;
+	long			time_now;
+	long			seconds_to_miliseconds;
+	long			microseconds_to_miliseconds;
 
 	gettimeofday(&timeval, NULL);
 	seconds_to_miliseconds = timeval.tv_sec * 1000;
@@ -38,7 +38,25 @@ long int	time_now(void)
 * @return difference between start_time and
 * time_now in miliseconds.
 */
-long int	get_time_passed_since(long int start_time)
+long	get_time_passed_since(long start_time)
 {	
 	return (time_now() - start_time);
+}
+
+void	check_starvation(int i, t_philosophers **philo, t_app *app)
+{
+	long	tmp;
+
+	pthread_mutex_lock(&app->lock_time);
+	tmp = get_time_passed_since(philo[0][i].last_meal_time);
+	pthread_mutex_unlock(&app->lock_time);
+	if (tmp > app->time_to_die)
+	{
+		pthread_mutex_lock(&app->lock_app);
+		app->stop = 1;
+		pthread_mutex_unlock(&app->lock_app);
+		usleep(500);
+		print(&philo[0][i], DIE);
+	}
+	pthread_mutex_lock(&app->lock_meal);
 }

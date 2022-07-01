@@ -6,7 +6,7 @@
 /*   By: argel <argel@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 18:41:05 by acapela-          #+#    #+#             */
-/*   Updated: 2022/06/30 09:52:55 by argel            ###   ########.fr       */
+/*   Updated: 2022/06/30 20:23:53 by argel            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ void	print(t_philosophers *philo, int state)
 {
 	char		*msg[6];
 
+	pthread_mutex_lock(&philo->app->lock_app);
 	msg[0] = "has taken a fork";
 	msg[1] = "is eating";
 	msg[2] = "is sleeping";
@@ -74,4 +75,5 @@ void	print(t_philosophers *philo, int state)
 	else if ((philo->app->stop && state == DIE) || !philo->app->stop)
 		printf("%5.3ld\t%d %s\n", get_time_passed_since(philo->app->start_time), \
 philo->id + 1, msg[state]);
+	pthread_mutex_unlock(&philo->app->lock_app);
 }

@@ -6,7 +6,7 @@
 /*   By: argel <argel@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 18:41:05 by acapela-          #+#    #+#             */
-/*   Updated: 2022/06/30 13:49:14 by argel            ###   ########.fr       */
+/*   Updated: 2022/06/30 20:55:10 by argel            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void	check_starvation(t_philosophers *philo)
 	if (time_since_last_meal > philo->app->time_to_die)
 	{
 		print(philo, DIE);
-		exit_process(philo, 1);
+		exit_process(&philo, 1);
 	}
 }
 

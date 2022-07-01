@@ -6,7 +6,7 @@
 /*   By: argel <argel@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 18:41:05 by acapela-          #+#    #+#             */
-/*   Updated: 2022/06/30 13:44:39 by argel            ###   ########.fr       */
+/*   Updated: 2022/06/30 21:20:45 by argel            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,15 @@
 static int	go_eat(t_philosophers *philo)
 {
 	sem_wait(*philo->right_fork);
+	print(philo, FORK);
 	sem_wait(*philo->left_fork);
 	print(philo, FORK);
-	print(philo, FORK);
+	if (philo->app->n_philo == 1)
+	{
+		usleep(1000 * philo->app->time_to_die);
+		print(philo, DIE);
+		exit_process(&philo, 1);
+	}
 	print(philo, EAT);
 	philo->last_meal_time = get_time_passed_since(philo->app->start_time);
 	msleep(philo->app->time_to_eat, philo);
@@ -47,23 +53,15 @@ static int	go_think(t_philosophers *philo)
 	return (0);
 }
 
-int	routine(t_philosophers **p_philo)
+int	routine(t_philosophers *philo)
 {	
-	t_philosophers	*philo;
-
-	philo = *p_philo;
 	if (philo->id % 2)
 		usleep(5 * 1000);
-	if (philo->app->n_philo == 1)
-	{
-		print(philo, DIE);
-		exit_process(philo, 1);
-	}
 	while (1)
 	{
 		go_eat(philo);
 		if (philo->meals == 0)
-			exit_process(philo, 0);
+			exit_process(&philo, 0);
 		go_sleep(philo);
 		go_think(philo);
 	}

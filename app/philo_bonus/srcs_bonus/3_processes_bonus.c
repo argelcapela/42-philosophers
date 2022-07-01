@@ -6,13 +6,14 @@
 /*   By: argel <argel@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/25 11:45:42 by argel             #+#    #+#             */
-/*   Updated: 2022/06/30 12:42:23 by argel            ###   ########.fr       */
+/*   Updated: 2022/06/30 21:27:22 by argel            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <_philosophers_bonus.h>
 
-void	create_process(t_philosophers *philo, int (*f)(t_philosophers **))
+void	create_process(t_philosophers *philo, \
+int (*f)(t_philosophers *), t_philosophers **s_philo)
 {
 	int	exit_code;
 
@@ -20,8 +21,8 @@ void	create_process(t_philosophers *philo, int (*f)(t_philosophers **))
 	philo->pid = fork();
 	if (philo->pid == 0)
 	{
-		exit_code = f(&philo);
-		exit_process(philo, exit_code);
+		exit_code = f(philo);
+		exit_process(s_philo, exit_code);
 	}
 }
 

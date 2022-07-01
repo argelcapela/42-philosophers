@@ -6,7 +6,7 @@
 /*   By: argel <argel@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 18:41:00 by acapela-          #+#    #+#             */
-/*   Updated: 2022/06/30 12:53:47 by argel            ###   ########.fr       */
+/*   Updated: 2022/06/30 21:28:01 by argel            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ int	main(int argc, char **argv)
 	init_philosophers(&philo, &app);
 	init_forks(&philo);
 	start_routine(&philo);
+	free(philo);
 	exit_app(&app);
 	return (0);
 }

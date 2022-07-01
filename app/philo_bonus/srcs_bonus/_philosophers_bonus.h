@@ -6,7 +6,7 @@
 /*   By: argel <argel@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 18:41:09 by acapela-          #+#    #+#             */
-/*   Updated: 2022/06/30 13:43:12 by argel            ###   ########.fr       */
+/*   Updated: 2022/06/30 21:26:25 by argel            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,11 +109,12 @@ void		check_starvation(t_philosophers *philo);
 void		msleep(long time_to_wait, t_philosophers *philo);
 
 // 3
-void		create_process(t_philosophers *philo, int (*f)(t_philosophers **));
+void		create_process(t_philosophers *philo, \
+int (*f)(t_philosophers *), t_philosophers **s_philo);
 void		wait_processes_finish(t_philosophers **philo);
 
 // 4
-int			routine(t_philosophers **p_philo);
+int			routine(t_philosophers *p_philo);
 
 // 5
 void		init_app(t_app *app, int argc, char **argv);
@@ -123,6 +124,6 @@ void		start_routine(t_philosophers **philo);
 
 // 6
 void		exit_app(t_app *app);
-void		exit_process(t_philosophers *philo, int exit_code);
+void		exit_process(t_philosophers **philo, int exit_code);
 
 #endif

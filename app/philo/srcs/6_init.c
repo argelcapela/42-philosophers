@@ -6,7 +6,7 @@
 /*   By: argel <argel@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/29 21:58:47 by argel             #+#    #+#             */
-/*   Updated: 2022/06/30 13:49:35 by argel            ###   ########.fr       */
+/*   Updated: 2022/06/30 18:51:45 by argel            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,11 @@ sizeof(pthread_mutex_t));
 		pthread_mutex_init(&app->fork[i], NULL);
 		i++;
 	}
+	pthread_mutex_init(&app->lock_meal, NULL);
+	pthread_mutex_init(&app->lock_print, NULL);
+	pthread_mutex_init(&app->lock_time, NULL);
+	pthread_mutex_init(&app->lock_app, NULL);
+	pthread_mutex_init(&app->lock_any, NULL);
 }
 
 void	init_philosophers(t_philosophers **philo, t_app *app)
@@ -86,9 +91,9 @@ void	init_philosophers(t_philosophers **philo, t_app *app)
 		else
 			philo[0][i].left_fork = &app->fork[i - 1];
 		philo[0][i].meals = philo[0][i].app->max_meals_by_philo;
+		philo[0][i].last_meal_time = time_now();
 		pthread_create(&philo[0][i].thread, NULL, \
 &routine, &philo[0][i]);
-		philo[0][i].last_meal_time = time_now();
 		i++;
 	}
 }

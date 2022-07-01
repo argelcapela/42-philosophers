@@ -6,7 +6,7 @@
 /*   By: argel <argel@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 18:41:09 by acapela-          #+#    #+#             */
-/*   Updated: 2022/06/30 09:57:08 by argel            ###   ########.fr       */
+/*   Updated: 2022/06/30 20:31:41 by argel            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,11 @@
 */
 typedef struct s_app
 {
+	pthread_mutex_t	lock_meal;
+	pthread_mutex_t	lock_time;
+	pthread_mutex_t	lock_print;
+	pthread_mutex_t	lock_app;
+	pthread_mutex_t	lock_any;
 	pthread_mutex_t	*fork;
 	int				n_philo;
 	int				time_to_eat;
@@ -91,8 +96,9 @@ int			ft_atoi(const char *str);
 void		print(t_philosophers *philo, int state);
 
 // 2
-long int	time_now(void);
-long int	get_time_passed_since(long int start_time);
+long		time_now(void);
+long		get_time_passed_since(long int start_time);
+void		check_starvation(int i, t_philosophers **philo, t_app *app);
 
 // 3
 void		destroy_forks(t_app *app);

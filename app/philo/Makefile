@@ -4,8 +4,6 @@
 CC =            gcc
 CFLAGS = 		-Wall -Wextra -Werror -ggdb3
 PTHFLAG =		-pthread
-SANITIZE =		
-#-fsanitize=thread
 RM =            rm -rfd
 
 # Mandatory
