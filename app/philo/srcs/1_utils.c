@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   1_utils.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: argel <argel@student.42.fr>                +#+  +:+       +#+        */
+/*   By: acapela- <acapela-@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 18:41:05 by acapela-          #+#    #+#             */
-/*   Updated: 2022/06/30 20:23:53 by argel            ###   ########.fr       */
+/*   Updated: 2022/07/01 14:53:15 by acapela-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ int	ft_atoi(const char *str)
 */
 void	print(t_philosophers *philo, int state)
 {
-	char		*msg[6];
+	char		*msg[5];
 
 	pthread_mutex_lock(&philo->app->lock_app);
 	msg[0] = "has taken a fork";
@@ -64,16 +64,16 @@ void	print(t_philosophers *philo, int state)
 	msg[2] = "is sleeping";
 	msg[3] = "is thinking";
 	msg[4] = "died";
-	msg[5] = "Invalid argument, please try again! \n\nexample:\n \
-./philo [number_of_philosophers] [time_to_die] [time_to_eat] \
-[time_to_sleep] [number_of_times_each_philosopher_must_eat]\n\n";
-	if (philo == NULL && state == INVALID_ARGS)
-	{
-		printf("%s", msg[5]);
-		exit(1);
-	}
-	else if ((philo->app->stop && state == DIE) || !philo->app->stop)
+	if ((philo->app->stop && state == DIE) || !philo->app->stop)
 		printf("%5.3ld\t%d %s\n", get_time_passed_since(philo->app->start_time), \
 philo->id + 1, msg[state]);
 	pthread_mutex_unlock(&philo->app->lock_app);
+}
+
+void	invalid_args(void)
+{
+	printf("Invalid argument, please try again! \n\nexample:\n \
+./philo [number_of_philosophers] [time_to_die] [time_to_eat] \
+[time_to_sleep] [number_of_times_each_philosopher_must_eat]\n\n");
+	exit(1);
 }

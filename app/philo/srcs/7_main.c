@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   7_main.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: argel <argel@student.42.fr>                +#+  +:+       +#+        */
+/*   By: acapela- <acapela-@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 18:41:00 by acapela-          #+#    #+#             */
-/*   Updated: 2022/06/30 09:58:56 by argel            ###   ########.fr       */
+/*   Updated: 2022/07/01 14:47:04 by acapela-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	main(int argc, char **argv)
 	t_philosophers	*philo;
 
 	if (argc < 5 || argc > 6)
-		print(NULL, INVALID_ARGS);
+		invalid_args();
 	init_app(&app, argc, argv);
 	philo = malloc(app.n_philo * sizeof(t_philosophers));
 	init_forks(&app);

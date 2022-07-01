@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   1_utils_bonus.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: argel <argel@student.42.fr>                +#+  +:+       +#+        */
+/*   By: acapela- <acapela-@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 18:41:05 by acapela-          #+#    #+#             */
-/*   Updated: 2022/06/30 13:00:12 by argel            ###   ########.fr       */
+/*   Updated: 2022/07/01 14:53:04 by acapela-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ until this process be killed.
 */
 void	print(t_philosophers *philo, int state)
 {
-	char		*msg[6];
+	char		*msg[5];
 	long int	current_time;
 
 	msg[0] = "has taken a fork";
@@ -68,17 +68,17 @@ void	print(t_philosophers *philo, int state)
 	msg[2] = "is sleeping";
 	msg[3] = "is thinking";
 	msg[4] = "died";
-	msg[5] = "Invalid argument, please try again! \n\nexample:\n \
-./philo [number_of_philosophers] [time_to_die] [time_to_eat] \
-[time_to_sleep] [number_of_times_each_philosopher_must_eat]\n\n";
-	if (philo == NULL && state == INVALID_ARGS)
-	{
-		printf("%s", msg[5]);
-		exit(1);
-	}
 	sem_wait(philo->app->lock_print);
 	current_time = get_time_passed_since(philo->app->start_time);
 	printf("%5ld\t%d %s\n", current_time, philo->id + 1, msg[state]);
 	if (state != DIE)
 		sem_post(philo->app->lock_print);
+}
+
+void	invalid_args(void)
+{
+	printf("Invalid argument, please try again! \n\nexample:\n \
+./philo [number_of_philosophers] [time_to_die] [time_to_eat] \
+[time_to_sleep] [number_of_times_each_philosopher_must_eat]\n\n");
+	exit(1);
 }

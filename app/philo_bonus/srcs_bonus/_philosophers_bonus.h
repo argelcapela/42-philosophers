@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   _philosophers_bonus.h                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: argel <argel@student.42.fr>                +#+  +:+       +#+        */
+/*   By: acapela- <acapela-@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 18:41:09 by acapela-          #+#    #+#             */
-/*   Updated: 2022/07/01 08:36:41 by argel            ###   ########.fr       */
+/*   Updated: 2022/07/01 14:54:00 by acapela-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,7 @@ typedef struct s_philosophers
 int			ft_isdigit(int c);
 int			ft_atoi(const char *str);
 void		print(t_philosophers *philo, int state);
+void		invalid_args(void);
 
 // 2
 long		time_now(void);

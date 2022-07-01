@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   6_init.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: argel <argel@student.42.fr>                +#+  +:+       +#+        */
+/*   By: acapela- <acapela-@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/29 21:58:47 by argel             #+#    #+#             */
-/*   Updated: 2022/06/30 18:51:45 by argel            ###   ########.fr       */
+/*   Updated: 2022/07/01 15:12:27 by acapela-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static int	parse_args(t_app *app)
 		|| (app->time_to_sleep < 60))
 		return (1);
 	if (!app->max_meals_by_philo
-		|| (app->max_meals_by_philo != -8
+		|| (app->max_meals_by_philo != -616
 			&& app->max_meals_by_philo <= 0))
 		return (1);
 	return (0);
@@ -46,14 +46,11 @@ void	init_app(t_app *app, int argc, char **argv)
 	}
 	else
 	{
-		app->max_meals_by_philo = -8;
-		app->max_meals = -8;
+		app->max_meals_by_philo = -616;
+		app->max_meals = -616;
 	}
 	if (parse_args(app) == 1)
-	{
-		print(NULL, INVALID_ARGS);
-		exit_app(app, NULL, 1);
-	}
+		invalid_args();
 }
 
 void	init_forks(t_app *app)
