@@ -38,12 +38,12 @@ $(OBJS_DIR):
 
 clean:
 	$(RM) $(OBJS_DIR)
-	@echo -e "\e[1;32mCLEAN EXECUTED SUCCESFULY!\e[0m"
+	@echo -e "\e[1;32mBONUS CLEAN EXECUTED SUCCESFULY!\e[0m"
 
 fclean:	clean
 	find -name '$(NAME)' -delete
-	@echo -e "\e[1;32mFCLEAN EXECUTED SUCCESFULY!\e[0m"
+	@echo -e "\e[1;32mBONUS FCLEAN EXECUTED SUCCESFULY!\e[0m"
 
 re:
 	@make fclean && make all
-	@echo -e "\e[1;32mRE EXECUTED SUCCESFULY!\e[0m"
+	@echo -e "\e[1;32mBONUS RE EXECUTED SUCCESFULY!\e[0m"

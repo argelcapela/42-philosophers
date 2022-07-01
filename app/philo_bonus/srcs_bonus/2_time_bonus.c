@@ -6,7 +6,7 @@
 /*   By: argel <argel@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 18:41:05 by acapela-          #+#    #+#             */
-/*   Updated: 2022/06/30 20:55:10 by argel            ###   ########.fr       */
+/*   Updated: 2022/07/01 08:49:14 by argel            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ long	get_time_passed_since(long start_time)
 	return (time_now() - start_time);
 }
 
-void	check_starvation(t_philosophers *philo)
+int	check_starvation(t_philosophers *philo)
 {
 	long	curr_time_since_start_time;
 	long	time_since_last_meal;
@@ -55,8 +55,9 @@ void	check_starvation(t_philosophers *philo)
 	if (time_since_last_meal > philo->app->time_to_die)
 	{
 		print(philo, DIE);
-		exit_process(&philo, 1);
+		return (1);
 	}
+	return (0);
 }
 
 /**
@@ -68,14 +69,18 @@ void	check_starvation(t_philosophers *philo)
 * Loop executes, usleeping 10 in 10, while start_time was not
 * achieved yet;
 */
-void	msleep(long time_to_wait, t_philosophers *philo)
+int	msleep(long time_to_wait, t_philosophers *philo)
 {
 	long	start_time;
+	int		exit_code;
 
 	start_time = time_now();
 	while (get_time_passed_since(start_time) < time_to_wait)
 	{
 		usleep(10);
-		check_starvation(philo);
+		exit_code = check_starvation(philo);
+		if (exit_code)
+			return (1);
 	}
+	return (0);
 }

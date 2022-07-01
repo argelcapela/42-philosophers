@@ -6,7 +6,7 @@
 /*   By: argel <argel@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/28 10:50:48 by argel             #+#    #+#             */
-/*   Updated: 2022/06/30 21:24:34 by argel            ###   ########.fr       */
+/*   Updated: 2022/07/01 08:21:08 by argel            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,12 +51,12 @@ void	init_app(t_app *app, int argc, char **argv)
 	}
 	app->stop = 0;
 	app->start_time = 0;
-	app->lock_print = sem_open("/lock_print", O_CREAT, 777, 1);
 	if (parse_args(app) == 1)
 	{
 		print(NULL, INVALID_ARGS);
 		exit_app(app);
 	}
+	app->lock_print = sem_open("/lock_print", O_CREAT, 777, 1);
 }
 
 void	init_forks(t_philosophers **philo)
